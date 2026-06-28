@@ -4,12 +4,55 @@ body {
   margin: 0;
   min-height: 100vh;
   background:
-    radial-gradient(circle at top left, rgba(255, 184, 77, 0.28), transparent 28rem),
-    linear-gradient(135deg, #f7fbff 0%, #edf7f2 48%, #fff8ed 100%);
+    linear-gradient(120deg, rgba(18, 104, 179, 0.11), transparent 34%),
+    linear-gradient(235deg, rgba(225, 116, 45, 0.13), transparent 38%),
+    linear-gradient(135deg, #f7fbff 0%, #edf7f2 52%, #fff8ed 100%);
   color: #16212f;
   font-family: Inter, "Segoe UI", Arial, Helvetica, sans-serif;
 }
 
 * {
   box-sizing: border-box;
+}
+
+.cdk-overlay-container .mat-mdc-snack-bar-container.app-snackbar {
+  margin-top: 24px;
+}
+
+.cdk-overlay-container .mat-mdc-snack-bar-container.app-snackbar .mdc-snackbar__surface {
+  width: min(92vw, 460px);
+  min-width: 0;
+  border-radius: 8px;
+  color: #ffffff;
+  box-shadow: 0 20px 45px rgba(18, 43, 69, 0.22);
+}
+
+.cdk-overlay-container .mat-mdc-snack-bar-container.app-snackbar .mat-mdc-snack-bar-label {
+  color: #ffffff;
+  font-weight: 800;
+}
+
+.cdk-overlay-container .mat-mdc-snack-bar-container.app-snackbar .mat-mdc-snack-bar-action {
+  color: #ffffff;
+  font-weight: 900;
+}
+
+.cdk-overlay-container .mat-mdc-snack-bar-container.app-snackbar .mat-mdc-snack-bar-action .mdc-button__label {
+  color: #ffffff;
+}
+
+.cdk-overlay-container .mat-mdc-snack-bar-container.app-snackbar-success .mdc-snackbar__surface {
+  background: linear-gradient(135deg, #137f66, #159276);
+}
+
+.cdk-overlay-container .mat-mdc-snack-bar-container.app-snackbar-error .mdc-snackbar__surface {
+  background: linear-gradient(135deg, #a8322e, #c43e38);
+}
+
+.cdk-overlay-container .mat-mdc-snack-bar-container.app-snackbar-warning .mdc-snackbar__surface {
+  background: linear-gradient(135deg, #c2561a, #e1742d);
+}
+
+.cdk-overlay-container .mat-mdc-snack-bar-container.app-snackbar-info .mdc-snackbar__surface {
+  background: linear-gradient(135deg, #1268b3, #159276);
 }

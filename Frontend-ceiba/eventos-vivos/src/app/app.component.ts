@@ -5,6 +5,7 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { ApiService, EventItem, OccupancyReport, Reservation, Venue } from './api.service';
 
 @Component({
@@ -15,7 +16,8 @@ import { ApiService, EventItem, OccupancyReport, Reservation, Venue } from './ap
     MatDatepickerModule,
     MatFormFieldModule,
     MatInputModule,
-    MatNativeDateModule
+    MatNativeDateModule,
+    MatSnackBarModule
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
@@ -23,13 +25,14 @@ import { ApiService, EventItem, OccupancyReport, Reservation, Venue } from './ap
 export class AppComponent implements OnInit {
   private readonly fb = inject(FormBuilder);
   private readonly api = inject(ApiService);
+  private readonly snackBar = inject(MatSnackBar);
 
+  activeTab = signal<'create' | 'events' | 'reservations'>('create');
   venues = signal<Venue[]>([]);
   events = signal<EventItem[]>([]);
   selectedEvent = signal<EventItem | null>(null);
   lastReservation = signal<Reservation | null>(null);
   report = signal<OccupancyReport | null>(null);
-  message = signal('');
   loading = signal(false);
 
   readonly filtersForm = this.fb.nonNullable.group({
@@ -89,6 +92,7 @@ export class AppComponent implements OnInit {
   createEvent(): void {
     if (this.eventForm.invalid) {
       this.eventForm.markAllAsTouched();
+      this.notify('Completa los datos requeridos del evento.', 'warning');
       return;
     }
 
@@ -98,7 +102,7 @@ export class AppComponent implements OnInit {
 
     if (!startAt || !endAt) {
       this.eventForm.markAllAsTouched();
-      this.message.set('Selecciona fecha y hora de inicio y fin.');
+      this.notify('Selecciona fecha y hora de inicio y fin.', 'warning');
       return;
     }
 
@@ -113,7 +117,8 @@ export class AppComponent implements OnInit {
       type: rawEvent.type
     }).subscribe({
       next: (eventItem) => {
-        this.message.set(`Evento creado: ${eventItem.title}`);
+        this.notify(`Evento creado: ${eventItem.title}`, 'success');
+        this.activeTab.set('events');
         this.eventForm.reset({
           title: '',
           description: '',
@@ -136,12 +141,18 @@ export class AppComponent implements OnInit {
     this.selectedEvent.set(eventItem);
     this.lastReservation.set(null);
     this.report.set(null);
+    this.activeTab.set('reservations');
+  }
+
+  setActiveTab(tab: 'create' | 'events' | 'reservations'): void {
+    this.activeTab.set(tab);
   }
 
   reserve(): void {
     const eventItem = this.selectedEvent();
     if (!eventItem || this.reservationForm.invalid) {
       this.reservationForm.markAllAsTouched();
+      this.notify('Completa los datos de la reserva.', 'warning');
       return;
     }
 
@@ -151,7 +162,7 @@ export class AppComponent implements OnInit {
     }).subscribe({
       next: (reservation) => {
         this.lastReservation.set(reservation);
-        this.message.set(`Reserva pendiente creada #${reservation.id}`);
+        this.notify(`Reserva pendiente creada #${reservation.id}`, 'success');
       },
       error: (error) => this.setError(error)
     });
@@ -166,7 +177,7 @@ export class AppComponent implements OnInit {
     this.api.confirmPayment(reservation.id).subscribe({
       next: (updated) => {
         this.lastReservation.set(updated);
-        this.message.set(`Pago confirmado con codigo ${updated.reservationCode}`);
+        this.notify(`Pago confirmado con codigo ${updated.reservationCode}`, 'success');
       },
       error: (error) => this.setError(error)
     });
@@ -181,7 +192,7 @@ export class AppComponent implements OnInit {
     this.api.cancelReservation(reservation.id).subscribe({
       next: (updated) => {
         this.lastReservation.set(updated);
-        this.message.set(`Reserva cancelada. Entradas perdidas: ${updated.lostTickets}`);
+        this.notify(`Reserva cancelada. Entradas perdidas: ${updated.lostTickets}`, 'warning');
       },
       error: (error) => this.setError(error)
     });
@@ -204,7 +215,15 @@ export class AppComponent implements OnInit {
   }
 
   private setError(error: { error?: { detail?: string; title?: string } }): void {
-    this.message.set(error.error?.detail ?? error.error?.title ?? 'Ocurrio un error inesperado.');
+    this.notify(error.error?.detail ?? error.error?.title ?? 'Ocurrio un error inesperado.', 'error');
+  }
+
+  private notify(message: string, type: 'success' | 'error' | 'warning' | 'info' = 'info'): void {
+    this.snackBar.open(message, 'Cerrar', {
+      horizontalPosition: 'center',
+      verticalPosition: 'top',
+      panelClass: ['app-snackbar', `app-snackbar-${type}`]
+    });
   }
 
   private combineDateAndTime(date: Date | null, time: string): string | null {
