@@ -1,0 +1,156 @@
+<main class="shell">
+  <header class="topbar">
+    <div>
+      <p class="eyebrow">EventosVivos</p>
+      <h1>Sistema de reservas</h1>
+    </div>
+    <button type="button" (click)="loadEvents()">Actualizar</button>
+  </header>
+
+  @if (message()) {
+    <section class="notice">{{ message() }}</section>
+  }
+
+  <section class="layout">
+    <form class="panel" [formGroup]="eventForm" (ngSubmit)="createEvent()">
+      <h2>Crear evento</h2>
+      <label>
+        Titulo
+        <input formControlName="title" />
+      </label>
+      <label>
+        Descripcion
+        <textarea formControlName="description"></textarea>
+      </label>
+      <div class="grid two">
+        <label>
+          Venue
+          <select formControlName="venueId">
+            @for (venue of venues(); track venue.id) {
+              <option [ngValue]="venue.id">{{ venue.name }} ({{ venue.capacity }})</option>
+            }
+          </select>
+        </label>
+        <label>
+          Capacidad
+          <input type="number" formControlName="maxCapacity" />
+        </label>
+        <label>
+          Inicio
+          <input type="datetime-local" formControlName="startAt" />
+        </label>
+        <label>
+          Fin
+          <input type="datetime-local" formControlName="endAt" />
+        </label>
+        <label>
+          Precio
+          <input type="number" formControlName="price" />
+        </label>
+        <label>
+          Tipo
+          <select formControlName="type">
+            <option value="conferencia">Conferencia</option>
+            <option value="taller">Taller</option>
+            <option value="concierto">Concierto</option>
+          </select>
+        </label>
+      </div>
+      <button type="submit">Crear</button>
+    </form>
+
+    <section class="panel">
+      <h2>Eventos</h2>
+      <form class="filters" [formGroup]="filtersForm" (ngSubmit)="loadEvents()">
+        <input placeholder="Buscar titulo" formControlName="search" />
+        <select formControlName="type">
+          <option value="">Tipo</option>
+          <option value="conferencia">Conferencia</option>
+          <option value="taller">Taller</option>
+          <option value="concierto">Concierto</option>
+        </select>
+        <select formControlName="status">
+          <option value="">Estado</option>
+          <option value="activo">Activo</option>
+          <option value="cancelado">Cancelado</option>
+          <option value="completado">Completado</option>
+        </select>
+        <button type="submit">Filtrar</button>
+      </form>
+
+      <div class="event-list">
+        @if (loading()) {
+          <p>Cargando...</p>
+        }
+        @for (eventItem of events(); track eventItem.id) {
+          <button type="button" class="event-row" (click)="selectEvent(eventItem)">
+            <strong>{{ eventItem.title }}</strong>
+            <span>{{ eventItem.type }} · {{ venueName(eventItem.venueId) }} · {{ eventItem.status }}</span>
+            <span>{{ eventItem.startAt | date:'short' }} · ${{ eventItem.price }}</span>
+          </button>
+        }
+      </div>
+    </section>
+  </section>
+
+  @if (selectedEvent(); as eventItem) {
+    <section class="layout detail">
+      <form class="panel" [formGroup]="reservationForm" (ngSubmit)="reserve()">
+        <h2>Reservar: {{ eventItem.title }}</h2>
+        <div class="grid three">
+          <label>
+            Cantidad
+            <input type="number" formControlName="quantity" />
+          </label>
+          <label>
+            Comprador
+            <input formControlName="buyerName" />
+          </label>
+          <label>
+            Email
+            <input type="email" formControlName="buyerEmail" />
+          </label>
+        </div>
+        <div class="actions">
+          <button type="submit">Reservar</button>
+          <button type="button" (click)="loadReport()">Reporte</button>
+        </div>
+      </form>
+
+      <section class="panel">
+        <h2>Operacion</h2>
+        @if (lastReservation(); as reservation) {
+          <dl class="summary">
+            <dt>Reserva</dt>
+            <dd>#{{ reservation.id }}</dd>
+            <dt>Estado</dt>
+            <dd>{{ reservation.status }}</dd>
+            <dt>Codigo</dt>
+            <dd>{{ reservation.reservationCode || 'Pendiente' }}</dd>
+            <dt>Entradas perdidas</dt>
+            <dd>{{ reservation.lostTickets }}</dd>
+          </dl>
+          <div class="actions">
+            <button type="button" (click)="confirmPayment()">Confirmar pago</button>
+            <button type="button" class="danger" (click)="cancelReservation()">Cancelar</button>
+          </div>
+        } @else {
+          <p>Selecciona un evento y crea una reserva.</p>
+        }
+      </section>
+
+      @if (report(); as item) {
+        <section class="panel report">
+          <h2>Ocupacion</h2>
+          <div class="metrics">
+            <div><strong>{{ item.soldTickets }}</strong><span>Vendidas</span></div>
+            <div><strong>{{ item.availableTickets }}</strong><span>Disponibles</span></div>
+            <div><strong>{{ item.lostTickets }}</strong><span>Perdidas</span></div>
+            <div><strong>{{ item.occupancyPercentage }}%</strong><span>Ocupacion</span></div>
+            <div><strong>${{ item.income }}</strong><span>Ingresos</span></div>
+          </div>
+        </section>
+      }
+    </section>
+  }
+</main>
