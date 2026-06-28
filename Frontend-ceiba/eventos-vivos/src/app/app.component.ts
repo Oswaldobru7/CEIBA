@@ -53,7 +53,7 @@ export class AppComponent implements OnInit {
     startTime: this.fb.nonNullable.control('18:00', Validators.required),
     endDate: this.fb.control<Date | null>(null, Validators.required),
     endTime: this.fb.nonNullable.control('20:00', Validators.required),
-    price: this.fb.nonNullable.control(50, [Validators.required, Validators.min(1)]),
+    price: this.fb.nonNullable.control(50000, [Validators.required, Validators.min(1)]),
     type: this.fb.nonNullable.control('conferencia', Validators.required)
   });
 
@@ -128,7 +128,7 @@ export class AppComponent implements OnInit {
           startTime: '18:00',
           endDate: null,
           endTime: '20:00',
-          price: 50,
+          price: 50000,
           type: 'conferencia'
         });
         this.loadEvents();
@@ -212,6 +212,14 @@ export class AppComponent implements OnInit {
 
   venueName(id: number): string {
     return this.venues().find((venue) => venue.id === id)?.name ?? `Venue ${id}`;
+  }
+
+  formatCop(value: number): string {
+    return new Intl.NumberFormat('es-CO', {
+      style: 'currency',
+      currency: 'COP',
+      maximumFractionDigits: 0
+    }).format(value);
   }
 
   private setError(error: { error?: { detail?: string; title?: string } }): void {

@@ -104,8 +104,8 @@
           <h3>Comercial</h3>
           <div class="grid two form-grid">
             <label>
-              Precio
-              <input type="number" formControlName="price" />
+              Precio (COP)
+              <input type="number" formControlName="price" placeholder="Ej. 50000" />
             </label>
             <label>
               Tipo
@@ -160,7 +160,7 @@
               <span class="event-type">{{ eventItem.type }}</span>
               <strong>{{ eventItem.title }}</strong>
               <span>{{ venueName(eventItem.venueId) }} &middot; {{ eventItem.status }}</span>
-              <span>{{ eventItem.startAt | date:'short' }} &middot; ${{ eventItem.price }}</span>
+              <span>{{ eventItem.startAt | date:'short' }} &middot; {{ formatCop(eventItem.price) }}</span>
             </button>
           } @empty {
             <p class="empty-state">No hay eventos con los filtros actuales.</p>
@@ -178,7 +178,7 @@
                 <p class="eyebrow compact">Evento seleccionado</p>
                 <h2>{{ eventItem.title }}</h2>
                 <p class="reservation-meta">
-                  {{ venueName(eventItem.venueId) }} &middot; {{ eventItem.startAt | date:'medium' }} &middot; ${{ eventItem.price }} por entrada
+                  {{ venueName(eventItem.venueId) }} &middot; {{ eventItem.startAt | date:'medium' }} &middot; {{ formatCop(eventItem.price) }} por entrada
                 </p>
               </div>
               <button type="button" class="ghost" (click)="loadReport()">Reporte</button>
@@ -186,7 +186,7 @@
 
             <div class="reservation-total">
               <span>Total estimado</span>
-              <strong>${{ eventItem.price * reservationForm.controls.quantity.value }}</strong>
+              <strong>{{ formatCop(eventItem.price * reservationForm.controls.quantity.value) }}</strong>
             </div>
 
             <div class="grid three reservation-fields">
@@ -243,7 +243,7 @@
                 <div><strong>{{ item.availableTickets }}</strong><span>Disponibles</span></div>
                 <div><strong>{{ item.lostTickets }}</strong><span>Perdidas</span></div>
                 <div><strong>{{ item.occupancyPercentage }}%</strong><span>Ocupacion</span></div>
-                <div><strong>${{ item.income }}</strong><span>Ingresos</span></div>
+                <div><strong>{{ formatCop(item.income) }}</strong><span>Ingresos</span></div>
               </div>
             </section>
           }
