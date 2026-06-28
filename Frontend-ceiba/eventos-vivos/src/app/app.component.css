@@ -1,7 +1,7 @@
 .shell {
   width: min(1320px, calc(100% - 32px));
   margin: 0 auto;
-  padding: 24px 0 40px;
+  padding: 28px 0 44px;
 }
 
 .topbar {
@@ -9,14 +9,20 @@
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  margin-bottom: 16px;
+  margin-bottom: 20px;
+  padding: 20px;
+  border: 1px solid rgba(38, 115, 101, 0.18);
+  border-radius: 8px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.94), rgba(236, 247, 242, 0.9));
+  box-shadow: 0 18px 45px rgba(22, 33, 47, 0.1);
 }
 
 .eyebrow {
   margin: 0 0 4px;
-  color: #267365;
+  color: #b95600;
   font-size: 13px;
   font-weight: 700;
+  letter-spacing: 0;
   text-transform: uppercase;
 }
 
@@ -26,12 +32,30 @@ h2 {
 }
 
 h1 {
-  font-size: 32px;
+  color: #17324d;
+  font-size: 34px;
+  line-height: 1.12;
 }
 
 h2 {
+  color: #17324d;
   font-size: 18px;
   margin-bottom: 16px;
+}
+
+h3 {
+  margin: 0 0 12px;
+  color: #17324d;
+  font-size: 14px;
+  line-height: 1.2;
+}
+
+.subtitle {
+  max-width: 620px;
+  margin: 8px 0 0;
+  color: #546172;
+  font-size: 15px;
+  line-height: 1.45;
 }
 
 .layout {
@@ -47,19 +71,69 @@ h2 {
 }
 
 .panel {
-  background: #ffffff;
-  border: 1px solid #d8dee4;
+  background: rgba(255, 255, 255, 0.94);
+  border: 1px solid rgba(23, 50, 77, 0.12);
   border-radius: 8px;
   padding: 18px;
-  box-shadow: 0 10px 28px rgba(29, 40, 52, 0.06);
+  box-shadow: 0 14px 32px rgba(22, 33, 47, 0.08);
+}
+
+.event-form {
+  display: grid;
+  gap: 18px;
+  padding: 22px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.99), rgba(247, 250, 252, 0.98)),
+    #ffffff;
+}
+
+.event-form h2 {
+  margin-bottom: 0;
+}
+
+.form-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid rgba(23, 50, 77, 0.1);
+}
+
+.form-chip {
+  flex: 0 0 auto;
+  border: 1px solid rgba(27, 138, 115, 0.18);
+  border-radius: 999px;
+  padding: 6px 10px;
+  background: #edf9f5;
+  color: #174b42;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.form-section {
+  display: grid;
+  gap: 14px;
+  padding: 2px 0;
+}
+
+.form-section + .form-section {
+  padding-top: 2px;
+}
+
+.form-grid {
+  align-items: end;
+  gap: 16px;
 }
 
 .notice {
   margin-bottom: 16px;
   padding: 12px 14px;
-  border-left: 4px solid #267365;
-  background: #edf7f4;
+  border-left: 4px solid #1b8a73;
+  background: #eaf8f4;
   border-radius: 6px;
+  color: #174b42;
+  font-weight: 700;
 }
 
 .grid {
@@ -77,22 +151,73 @@ h2 {
 
 label {
   display: grid;
-  gap: 6px;
-  color: #3d4652;
-  font-size: 13px;
+  gap: 7px;
+  color: #29415a;
+  font-size: 12px;
   font-weight: 700;
+  line-height: 1.2;
+}
+
+.field {
+  display: grid;
+  gap: 7px;
+  color: #29415a;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.material-field {
+  width: 100%;
+}
+
+.event-form input,
+.event-form select,
+.event-form textarea {
+  border-color: #bfcdd8;
+  background: #ffffff;
+}
+
+.event-form input:hover,
+.event-form select:hover,
+.event-form textarea:hover {
+  border-color: #95adbd;
+}
+
+.event-form input::placeholder,
+.event-form textarea::placeholder {
+  color: #7a8796;
+}
+
+.event-form input.ng-invalid.ng-touched,
+.event-form select.ng-invalid.ng-touched,
+.event-form textarea.ng-invalid.ng-touched,
+.event-form .mat-mdc-form-field.ng-invalid.ng-touched {
+  border-color: #c43e38;
 }
 
 input,
 select,
 textarea {
   width: 100%;
-  min-height: 40px;
-  border: 1px solid #c8d0d8;
-  border-radius: 6px;
-  padding: 8px 10px;
+  min-height: 44px;
+  border: 1px solid #c4d3df;
+  border-radius: 8px;
+  padding: 10px 12px;
+  background: #ffffff;
+  color: #16212f;
   font: inherit;
   box-sizing: border-box;
+  box-shadow: 0 1px 0 rgba(22, 33, 47, 0.03);
+  transition: border-color 0.16s ease, box-shadow 0.16s ease, background 0.16s ease;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: #1b8a73;
+  box-shadow: 0 0 0 3px rgba(27, 138, 115, 0.14);
+  outline: 0;
 }
 
 textarea {
@@ -100,31 +225,122 @@ textarea {
   resize: vertical;
 }
 
+.event-form textarea {
+  min-height: 96px;
+  line-height: 1.45;
+}
+
+:host ::ng-deep .event-form .mat-mdc-form-field {
+  --mat-form-field-container-height: 44px;
+  --mat-form-field-container-vertical-padding: 0;
+  --mdc-outlined-text-field-container-shape: 8px;
+  --mdc-outlined-text-field-outline-color: #c4d3df;
+  --mdc-outlined-text-field-hover-outline-color: #95adbd;
+  --mdc-outlined-text-field-focus-outline-color: #1b8a73;
+  display: block;
+  font: inherit;
+  line-height: 1.2;
+}
+
+:host ::ng-deep .event-form .mat-mdc-text-field-wrapper {
+  height: 44px;
+  min-height: 44px;
+  background: #ffffff;
+  box-shadow: 0 1px 0 rgba(22, 33, 47, 0.03);
+}
+
+:host ::ng-deep .event-form .mat-mdc-form-field-flex,
+:host ::ng-deep .event-form .mat-mdc-form-field-infix {
+  height: 44px;
+  min-height: 44px;
+  align-items: center;
+}
+
+:host ::ng-deep .event-form .mat-mdc-form-field-infix {
+  display: flex;
+  padding-top: 0;
+  padding-bottom: 0;
+  width: auto;
+}
+
+:host ::ng-deep .event-form .mat-mdc-form-field input.mat-mdc-input-element {
+  height: 42px;
+  min-height: 42px;
+  border: 0;
+  border-radius: 0;
+  padding: 0;
+  background: transparent;
+  box-shadow: none;
+  color: #16212f;
+  font-weight: 600;
+}
+
+:host ::ng-deep .event-form .mat-mdc-form-field-subscript-wrapper {
+  display: none;
+}
+
+:host ::ng-deep .event-form .mat-mdc-icon-button.mat-mdc-button-base {
+  width: 40px;
+  height: 40px;
+  padding: 8px;
+}
+
+:host ::ng-deep .event-form .mat-mdc-form-field-icon-suffix {
+  align-self: center;
+  padding: 0 2px 0 0;
+}
+
 button {
   min-height: 40px;
   border: 0;
   border-radius: 6px;
   padding: 8px 14px;
-  background: #1f6feb;
+  background: linear-gradient(135deg, #1167b1, #1b8a73);
   color: #ffffff;
   font-weight: 700;
   cursor: pointer;
+  box-shadow: 0 10px 18px rgba(17, 103, 177, 0.18);
+  transition: transform 0.16s ease, box-shadow 0.16s ease, background 0.16s ease;
 }
 
 button:hover {
-  background: #185abc;
+  background: linear-gradient(135deg, #0d5796, #15735f);
+  box-shadow: 0 12px 22px rgba(17, 103, 177, 0.25);
+  transform: translateY(-1px);
+}
+
+.ghost {
+  border: 1px solid rgba(17, 103, 177, 0.2);
+  background: #ffffff;
+  color: #1167b1;
+  box-shadow: none;
+}
+
+.ghost:hover {
+  background: #eef7ff;
+  box-shadow: 0 10px 18px rgba(17, 103, 177, 0.12);
 }
 
 .danger {
-  background: #bf3b36;
+  background: linear-gradient(135deg, #c43e38, #e06d2f);
 }
 
 .danger:hover {
-  background: #9f2f2b;
+  background: linear-gradient(135deg, #a8322e, #c65a22);
 }
 
 form > button {
   margin-top: 14px;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: 2px;
+}
+
+.form-actions button {
+  min-width: 142px;
 }
 
 .filters,
@@ -154,19 +370,90 @@ form > button {
   width: 100%;
   min-height: 72px;
   padding: 12px;
-  border: 1px solid #d8dee4;
-  background: #f8fafc;
-  color: #17202a;
+  border: 1px solid rgba(17, 103, 177, 0.12);
+  background: linear-gradient(135deg, #ffffff, #f2f8ff);
+  color: #16212f;
   text-align: left;
+  box-shadow: none;
 }
 
 .event-row:hover {
-  background: #eef4ff;
+  background: linear-gradient(135deg, #eef7ff, #ecfbf4);
 }
 
 .event-row span {
-  color: #5b6673;
+  color: #5a6878;
   font-weight: 500;
+}
+
+.reservation-card {
+  display: grid;
+  gap: 16px;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.96), rgba(239, 249, 245, 0.95)),
+    #ffffff;
+}
+
+.reservation-header,
+.operation-title {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.compact {
+  margin-bottom: 3px;
+  font-size: 12px;
+}
+
+.reservation-meta {
+  margin: 8px 0 0;
+  color: #5a6878;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.45;
+}
+
+.reservation-total {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 14px 16px;
+  border: 1px solid rgba(27, 138, 115, 0.18);
+  border-radius: 8px;
+  background: linear-gradient(135deg, #f4fbf8, #eef7ff);
+}
+
+.reservation-total span {
+  color: #465366;
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.reservation-total strong {
+  color: #1167b1;
+  font-size: 26px;
+}
+
+.reservation-fields {
+  padding-top: 2px;
+}
+
+.operation-card {
+  border-color: rgba(17, 103, 177, 0.16);
+}
+
+.status-pill {
+  border-radius: 999px;
+  padding: 5px 10px;
+  background: #eaf8f4;
+  color: #174b42;
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
 }
 
 .summary {
@@ -176,7 +463,7 @@ form > button {
 }
 
 .summary dt {
-  color: #5b6673;
+  color: #5a6878;
   font-weight: 700;
 }
 
@@ -195,10 +482,10 @@ form > button {
 }
 
 .metrics div {
-  border: 1px solid #d8dee4;
+  border: 1px solid rgba(27, 138, 115, 0.16);
   border-radius: 8px;
   padding: 14px;
-  background: #fbfcfe;
+  background: linear-gradient(180deg, #ffffff, #f4fbf8);
 }
 
 .metrics strong,
@@ -207,11 +494,12 @@ form > button {
 }
 
 .metrics strong {
+  color: #1167b1;
   font-size: 24px;
 }
 
 .metrics span {
-  color: #5b6673;
+  color: #5a6878;
   font-size: 13px;
 }
 

@@ -3,6 +3,7 @@
     <div>
       <p class="eyebrow">EventosVivos</p>
       <h1>Sistema de reservas</h1>
+      <p class="subtitle">Gestiona eventos, aforo, reservas y ocupacion desde una sola consola.</p>
     </div>
     <button type="button" (click)="loadEvents()">Actualizar</button>
   </header>
@@ -12,51 +13,90 @@
   }
 
   <section class="layout">
-    <form class="panel" [formGroup]="eventForm" (ngSubmit)="createEvent()">
-      <h2>Crear evento</h2>
-      <label>
-        Titulo
-        <input formControlName="title" />
-      </label>
-      <label>
-        Descripcion
-        <textarea formControlName="description"></textarea>
-      </label>
-      <div class="grid two">
+    <form class="panel event-form" [formGroup]="eventForm" (ngSubmit)="createEvent()">
+      <div class="form-header">
+        <div>
+          <p class="eyebrow compact">Nuevo evento</p>
+          <h2>Crear evento</h2>
+        </div>
+        <span class="form-chip">{{ venues().length }} venues</span>
+      </div>
+
+      <div class="form-section">
+        <h3>Informacion basica</h3>
         <label>
-          Venue
-          <select formControlName="venueId">
-            @for (venue of venues(); track venue.id) {
-              <option [ngValue]="venue.id">{{ venue.name }} ({{ venue.capacity }})</option>
-            }
-          </select>
+          Titulo
+          <input formControlName="title" placeholder="Ej. Congreso de tecnologia" />
         </label>
         <label>
-          Capacidad
-          <input type="number" formControlName="maxCapacity" />
-        </label>
-        <label>
-          Inicio
-          <input type="datetime-local" formControlName="startAt" />
-        </label>
-        <label>
-          Fin
-          <input type="datetime-local" formControlName="endAt" />
-        </label>
-        <label>
-          Precio
-          <input type="number" formControlName="price" />
-        </label>
-        <label>
-          Tipo
-          <select formControlName="type">
-            <option value="conferencia">Conferencia</option>
-            <option value="taller">Taller</option>
-            <option value="concierto">Concierto</option>
-          </select>
+          Descripcion
+          <textarea formControlName="description" placeholder="Resume el objetivo, agenda o invitados del evento."></textarea>
         </label>
       </div>
-      <button type="submit">Crear</button>
+
+      <div class="form-section">
+        <h3>Logistica</h3>
+        <div class="grid two form-grid">
+          <label>
+            Venue
+            <select formControlName="venueId">
+              @for (venue of venues(); track venue.id) {
+                <option [ngValue]="venue.id">{{ venue.name }} ({{ venue.capacity }})</option>
+              }
+            </select>
+          </label>
+          <label>
+            Capacidad
+            <input type="number" formControlName="maxCapacity" />
+          </label>
+          <div class="field">
+            <span>Fecha inicio</span>
+            <mat-form-field appearance="outline" class="material-field">
+              <input matInput [matDatepicker]="startPicker" formControlName="startDate" placeholder="Selecciona fecha" />
+              <mat-datepicker-toggle matIconSuffix [for]="startPicker"></mat-datepicker-toggle>
+              <mat-datepicker #startPicker></mat-datepicker>
+            </mat-form-field>
+          </div>
+          <label>
+            Hora inicio
+            <input type="time" formControlName="startTime" />
+          </label>
+          <div class="field">
+            <span>Fecha fin</span>
+            <mat-form-field appearance="outline" class="material-field">
+              <input matInput [matDatepicker]="endPicker" formControlName="endDate" placeholder="Selecciona fecha" />
+              <mat-datepicker-toggle matIconSuffix [for]="endPicker"></mat-datepicker-toggle>
+              <mat-datepicker #endPicker></mat-datepicker>
+            </mat-form-field>
+          </div>
+          <label>
+            Hora fin
+            <input type="time" formControlName="endTime" />
+          </label>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <h3>Comercial</h3>
+        <div class="grid two form-grid">
+          <label>
+            Precio
+            <input type="number" formControlName="price" />
+          </label>
+          <label>
+            Tipo
+            <select formControlName="type">
+              <option value="conferencia">Conferencia</option>
+              <option value="taller">Taller</option>
+              <option value="concierto">Concierto</option>
+            </select>
+          </label>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button type="submit">Crear evento</button>
+      </div>
     </form>
 
     <section class="panel">
@@ -85,8 +125,8 @@
         @for (eventItem of events(); track eventItem.id) {
           <button type="button" class="event-row" (click)="selectEvent(eventItem)">
             <strong>{{ eventItem.title }}</strong>
-            <span>{{ eventItem.type }} · {{ venueName(eventItem.venueId) }} · {{ eventItem.status }}</span>
-            <span>{{ eventItem.startAt | date:'short' }} · ${{ eventItem.price }}</span>
+            <span>{{ eventItem.type }} &middot; {{ venueName(eventItem.venueId) }} &middot; {{ eventItem.status }}</span>
+            <span>{{ eventItem.startAt | date:'short' }} &middot; ${{ eventItem.price }}</span>
           </button>
         }
       </div>
@@ -95,9 +135,24 @@
 
   @if (selectedEvent(); as eventItem) {
     <section class="layout detail">
-      <form class="panel" [formGroup]="reservationForm" (ngSubmit)="reserve()">
-        <h2>Reservar: {{ eventItem.title }}</h2>
-        <div class="grid three">
+      <form class="panel reservation-card" [formGroup]="reservationForm" (ngSubmit)="reserve()">
+        <div class="reservation-header">
+          <div>
+            <p class="eyebrow compact">Reserva seleccionada</p>
+            <h2>{{ eventItem.title }}</h2>
+            <p class="reservation-meta">
+              {{ venueName(eventItem.venueId) }} &middot; {{ eventItem.startAt | date:'medium' }} &middot; ${{ eventItem.price }} por entrada
+            </p>
+          </div>
+          <button type="button" class="ghost" (click)="loadReport()">Reporte</button>
+        </div>
+
+        <div class="reservation-total">
+          <span>Total estimado</span>
+          <strong>${{ eventItem.price * reservationForm.controls.quantity.value }}</strong>
+        </div>
+
+        <div class="grid three reservation-fields">
           <label>
             Cantidad
             <input type="number" formControlName="quantity" />
@@ -112,13 +167,17 @@
           </label>
         </div>
         <div class="actions">
-          <button type="submit">Reservar</button>
-          <button type="button" (click)="loadReport()">Reporte</button>
+          <button type="submit">Crear reserva</button>
         </div>
       </form>
 
-      <section class="panel">
-        <h2>Operacion</h2>
+      <section class="panel operation-card">
+        <div class="operation-title">
+          <h2>Operacion</h2>
+          @if (lastReservation(); as reservation) {
+            <span class="status-pill">{{ reservation.status }}</span>
+          }
+        </div>
         @if (lastReservation(); as reservation) {
           <dl class="summary">
             <dt>Reserva</dt>
